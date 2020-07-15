@@ -46,40 +46,39 @@ public class CustomerResourceTest {
 	CustomerResource customerResource; 
 	@MockBean
 	CustomerService customerService;
-	
+
 	@Before
 	public void setup() {
-		 this.mockMvc = standaloneSetup(this.customerResource).build();// Standalone context
+		this.mockMvc = standaloneSetup(this.customerResource).build();// Standalone context
 	}
-	
+
 	@Test
 	public void saveCustomer() throws Exception {
 		LocalDateTime datetime = LocalDateTime.now();
 		Timestamp timestamp = Timestamp.valueOf(datetime);
 		CustomerTrackInfo customerTrackData = new CustomerTrackInfo(1,1,timestamp,2l,0l);
 		CustomerDataRequest customerDataReq = new CustomerDataRequest(1,2,"aaaa-bba-cc-123","211.120.20.45",timestamp);
-		
+
 		when(customerService.save(any(CustomerDataRequest.class))).thenReturn(customerTrackData);
-			
 		mockMvc.perform(post(URL).content(mapper.writeValueAsBytes(customerDataReq)).contentType(MediaType.APPLICATION_JSON))
-			 .andExpect(status().isCreated())
-			 .andExpect(jsonPath("$.id", is(1)))
-			 .andExpect(jsonPath("$.customerId", is(1)))
-			 .andExpect(jsonPath("$.time", is(customerDataReq.getTimestamp().getTime())))
-			 .andExpect(jsonPath("$.requestCount", is(2)))
-			 .andExpect(jsonPath("$.invalidCount", is(0))) ;
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("$.id", is(1)))
+		.andExpect(jsonPath("$.customerId", is(1)))
+		.andExpect(jsonPath("$.time", is(customerDataReq.getTimestamp().getTime())))
+		.andExpect(jsonPath("$.requestCount", is(2)))
+		.andExpect(jsonPath("$.invalidCount", is(0))) ;
 	}
-	
+
 	@Test
 	public void testgetCutomerByDate() throws Exception {
-		 CustomerDataResponse customerDataRes =new CustomerDataResponse(1,"2020-07-14",2l) ;
-		 when(customerService.getCustomerReqDetailByDate(Mockito.anyInt(), Mockito.anyString()))
-		                    .thenReturn(Optional.of(customerDataRes));
-		
-			mockMvc.perform(get(URL+"/1/2020-07-14").contentType(MediaType.APPLICATION_JSON))
-			 .andExpect(status().isOk())
-			 .andExpect(jsonPath("$.customerId", is(1)))
-			 .andExpect(jsonPath("$.date", is("2020-07-14")))
-			 .andExpect(jsonPath("$.totalNumberOfRequest", is(2)));
+		CustomerDataResponse customerDataRes =new CustomerDataResponse(1,"2020-07-14",2l) ;
+		when(customerService.getCustomerReqDetailByDate(Mockito.anyInt(), Mockito.anyString()))
+		.thenReturn(Optional.of(customerDataRes));
+
+		mockMvc.perform(get(URL+"/1/2020-07-14").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.customerId", is(1)))
+		.andExpect(jsonPath("$.date", is("2020-07-14")))
+		.andExpect(jsonPath("$.totalNumberOfRequest", is(2)));
 	} 
 }

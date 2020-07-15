@@ -32,45 +32,45 @@ import com.adtrack.validation.CustomerRequestValidator;
 public class CustomerResource {
 
 	public static final Logger logger = LoggerFactory.getLogger(CustomerResource.class);
-	      
+
 	@Autowired
-    private CustomerService customerService;
+	private CustomerService customerService;
 	@Autowired
 	private CustomerRequestValidator requestVaildator;
-	
+
 	// -------------------Save Customer ---------------------------------------------------------
-    /**
+	/**
 	 * This method use to save Customer Information 
 	 * @param CustomerDataRequest customerDataRequest
 	 * @return ResponseEntity<?>
 	 */
-    @PostMapping
-    public ResponseEntity<CustomerTrackInfo> saveCutomer(@Valid @RequestBody CustomerDataRequest request ) {
-    	logger.info("Customer hourly information request......");
-    	CustomerTrackInfo	customerInformation =null;
-    	if(! requestVaildator.getCustomer(request.getCustomerID()).isPresent())	{
-    	 	throw new NoDataFoundException("Worng customerId " +request.getCustomerID());
-    	}
-    	customerInformation = customerService.save(request);
+	@PostMapping
+	public ResponseEntity<CustomerTrackInfo> saveCutomer(@Valid @RequestBody CustomerDataRequest request ) {
+		logger.info("Customer hourly information request......");
+		CustomerTrackInfo	customerInformation =null;
+		if(! requestVaildator.getCustomer(request.getCustomerID()).isPresent())	{
+			throw new NoDataFoundException("Worng customerId " +request.getCustomerID());
+		}
+		customerInformation = customerService.save(request);
 		return Response.success(customerInformation, HttpStatus.CREATED);     
-    } 
-    
-    // -------------------Get  specific customer by date ---------------------------------------------------------
-    /**
+	} 
+
+	// -------------------Get  specific customer by date ---------------------------------------------------------
+	/**
 	 * This method use to get Customer requested detail by given date
 	 * @param int id
 	 * @param String date
 	 * @return ResponseEntity<CustomerDataResponse>
 	 */
-    @GetMapping(value = "/{id}/{date}")
-    public ResponseEntity<CustomerDataResponse> getCutomerByDate(@PathVariable ("id") @NotNull int id,
-    		                                                     @PathVariable ("date") @NotEmpty String date) {
-    	logger.info("Get customer deatil with Id "+ id +" & date "+date);
-    	Optional<CustomerDataResponse> customerData = customerService.getCustomerReqDetailByDate(id, date);
-    	if(! customerData.isPresent()) {
-    	 logger.info("No customer deatil found with Id "+ id +" & date "+date);
-    	 throw new NoDataFoundException("Not found customer detail with "+id +" on Date "+date)	;
-    	}
+	@GetMapping(value = "/{id}/{date}")
+	public ResponseEntity<CustomerDataResponse> getCutomerByDate(@PathVariable ("id") @NotNull int id,
+			@PathVariable ("date") @NotEmpty String date) {
+		logger.info("Get customer deatil with Id "+ id +" & date "+date);
+		Optional<CustomerDataResponse> customerData = customerService.getCustomerReqDetailByDate(id, date);
+		if(! customerData.isPresent()) {
+			logger.info("No customer deatil found with Id "+ id +" & date "+date);
+			throw new NoDataFoundException("Not found customer detail with "+id +" on Date "+date)	;
+		}
 		return Response.success(customerData.get(), HttpStatus.OK);      
-    } 
+	} 
 }

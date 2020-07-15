@@ -20,6 +20,5 @@ public class Customer {
     @GeneratedValue
 	private int id;
 	private String name ;
-	private int active;
-		
+	private int active;		
 }

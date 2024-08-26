@@ -18,7 +18,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<start-class>com.adtrack.AdtrackApplication</start-class>
-		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+		<springfox-swagger.version>2.10.0</springfox-swagger.version>
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
 		<flyway.version>6.4.3</flyway.version>
 		<commons-validator.version>1.6</commons-validator.version>
